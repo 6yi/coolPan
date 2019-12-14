@@ -8,9 +8,19 @@
 
 <div>
     <div th:each="file:${session.files}">
-        <p th:text="${file.filename}"></p>
+        <a  th:href="@{/files/download(filename=${file.filename})}" th:text="${file.filename}"></a>
     </div>
 </div>
+
+<div>
+    <form enctype="multipart/form-data" method="post" action="/files/upload">
+        选择文件<input type="file" name="file"/>
+        <input type="submit" value="上传"/>
+    </form>
+</div>
+
+
+
 
 </body>
 </html>
