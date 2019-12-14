@@ -6,7 +6,11 @@
 </head>
 <body>
 
-<a href="/files">我的文件</a>
+<div>
+    <div th:each="file:${session.files}">
+        <p th:text="${file.filename}"></p>
+    </div>
+</div>
 
 </body>
 </html>

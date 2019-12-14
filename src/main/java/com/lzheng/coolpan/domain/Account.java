@@ -1,6 +1,7 @@
 package com.lzheng.coolpan.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * account
@@ -16,6 +17,16 @@ public class Account implements Serializable {
     private String savefilename;
 
     private Integer maxsize;
+
+    private List<Files> filesList;
+
+    public List<Files> getFilesList() {
+        return filesList;
+    }
+
+    public void setFilesList(List<Files> filesList) {
+        this.filesList = filesList;
+    }
 
     private static final long serialVersionUID = 1L;
 

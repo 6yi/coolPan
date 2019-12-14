@@ -20,7 +20,8 @@
     <select id="selectById" resultType="com.lzheng.coolpan.domain.Account" parameterType="java.lang.String">
         select * from account where name =#{name}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from account
     where id = #{id,jdbcType=INTEGER}
   </delete>

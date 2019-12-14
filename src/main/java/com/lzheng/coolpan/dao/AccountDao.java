@@ -1,7 +1,10 @@
 package com.lzheng.coolpan.dao;
 
 import com.lzheng.coolpan.domain.Account;
+import com.lzheng.coolpan.domain.Files;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public interface AccountDao {
@@ -18,4 +21,6 @@ public interface AccountDao {
     int updateByPrimaryKeySelective(Account record);
 
     int updateByPrimaryKey(Account record);
+
+
 }

@@ -28,7 +28,7 @@ public class webConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginIn).addPathPatterns("/");
+        registry.addInterceptor(loginIn).addPathPatterns("/","/files/**");
     }
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {

@@ -1,7 +1,12 @@
 package com.lzheng.coolpan.Service;
 
+import com.lzheng.coolpan.dao.FilesDao;
 import com.lzheng.coolpan.domain.Account;
+import com.lzheng.coolpan.domain.Files;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @ClassName FileService
@@ -13,14 +18,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FileService {
-    private Account account;
 
-    public Account getAccount() {
-        return account;
-    }
+    @Autowired
+    private FilesDao dao;
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public List<Files> findFilesById(Integer id){
+        return dao.findByAccountId(id);
     }
 
 }

@@ -48,6 +48,7 @@ public class AccountCon {
             request.getSession().setAttribute("msg","密码错误");
             return "login";
         }
+
         request.getSession().setAttribute("needLogin","1");
         request.getSession().setAttribute("account",user);
         return "index";

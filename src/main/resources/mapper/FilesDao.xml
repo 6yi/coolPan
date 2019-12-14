@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzheng.coolpan.dao.FilesDao">
+  <resultMap id="BaseResultMap" type="com.lzheng.coolpan.domain.Files">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="account_id" jdbcType="INTEGER" property="accountId" />
+    <result column="filename" jdbcType="VARCHAR" property="filename" />
+    <result column="filepath" jdbcType="VARCHAR" property="filepath" />
+    <result column="filetype" jdbcType="VARCHAR" property="filetype" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, account_id, filename, filepath, filetype
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from files
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="findByAccountId" resultType="com.lzheng.coolpan.domain.Files">
+    select * from files where accountid=#{accountId}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from files
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Files" useGeneratedKeys="true">
+    insert into files (account_id, filename, filepath, 
+      filetype)
+    values (#{accountId,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
+      #{filetype,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Files" useGeneratedKeys="true">
+    insert into files
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="filename != null">
+        filename,
+      </if>
+      <if test="filepath != null">
+        filepath,
+      </if>
+      <if test="filetype != null">
+        filetype,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountId != null">
+        #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="filename != null">
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="filepath != null">
+        #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filetype != null">
+        #{filetype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lzheng.coolpan.domain.Files">
+    update files
+    <set>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="filename != null">
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="filepath != null">
+        filepath = #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filetype != null">
+        filetype = #{filetype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lzheng.coolpan.domain.Files">
+    update files
+    set account_id = #{accountId,jdbcType=INTEGER},
+      filename = #{filename,jdbcType=VARCHAR},
+      filepath = #{filepath,jdbcType=VARCHAR},
+      filetype = #{filetype,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
