@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +33,7 @@ public class FileCon {
     @Autowired
     private FileService service;
 
+    private static java.text.DecimalFormat   df   =new   java.text.DecimalFormat("#.00");
     @Value("${file.SavePath}")
     private String SavePath;
 
@@ -81,7 +83,7 @@ public class FileCon {
 
     @ResponseBody
     @PostMapping("/files/upload")
-    public String upload(@RequestParam("file") MultipartFile file) {
+    public String upload(@RequestParam("file") MultipartFile file,HttpServletRequest request) {
         if (file.isEmpty()) {
             return "上传失败，请选择文件";
         }
@@ -89,6 +91,12 @@ public class FileCon {
         File dest = new File(SavePath + fileName);
         try {
             file.transferTo(dest);
+            Files newfile=new Files();
+            newfile.setFilename(file.getName());
+            newfile.setSize(String.format("%.2f",(file.getSize()/1024000.0))+"MB");
+            Account account= (Account)request.getSession().getAttribute("account");
+            newfile.setAccountid(account.getId());
+            service.insert(newfile);
             return "上传成功";
         } catch (IOException e) {
                 e.printStackTrace();
@@ -100,11 +108,17 @@ public class FileCon {
     @RequestMapping("/files/type")
     public retDate findbyType(@RequestParam("type") Integer type,HttpServletRequest request){
         retDate date=new retDate();
-        date.setCode("200");
+        date.setCode("0");
         date.setMsg("");
         Object[] filesArry={};
         Account account= (Account)request.getSession().getAttribute("account");
-        List<Files> files=service.findFilesByType(account.getId(),type);
+        List<Files> files=null;
+        if (type==6){
+            files=service.findFilesById(account.getId());
+        }else{
+            files=service.findFilesByType(account.getId(),type);
+        }
+
 
         if (files!=null){
            filesArry=files.toArray();

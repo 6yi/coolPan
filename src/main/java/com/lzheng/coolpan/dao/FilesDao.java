@@ -18,5 +18,5 @@ public interface FilesDao {
     int updateByPrimaryKey(Files record);
 
     List<Files> findByAccountId(Integer id);
-    List<Files> findByType(Integer id,Integer type);
+    List<Files> findByType(Integer id, Integer type);
 }

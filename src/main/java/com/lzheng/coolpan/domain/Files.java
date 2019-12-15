@@ -17,7 +17,7 @@ public class Files implements Serializable {
 
     private Integer filetype;
 
-    private Integer size;
+    private String size;
 
     private String time;
 
@@ -63,11 +63,11 @@ public class Files implements Serializable {
         this.filetype = filetype;
     }
 
-    public Integer getSize() {
+    public String getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(String size) {
         this.size = size;
     }
 

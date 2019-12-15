@@ -7,7 +7,7 @@
     <result column="filename" jdbcType="VARCHAR" property="filename" />
     <result column="filepath" jdbcType="VARCHAR" property="filepath" />
     <result column="filetype" jdbcType="INTEGER" property="filetype" />
-    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
     <result column="time" jdbcType="VARCHAR" property="time" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -19,15 +19,7 @@
     from files
     where id = #{id,jdbcType=INTEGER}
   </select>
-
-  <select id="findByAccountId" resultType="com.lzheng.coolpan.domain.Files">
-  select * from files where accountid=#{id}
-</select>
-  <select id="findByType" resultType="com.lzheng.coolpan.domain.Files">
-  select f.filename,f.size,f.time from  files f where f.accountid=#{id} and f.filetype=#{type}
-</select>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from files
     where id = #{id,jdbcType=INTEGER}
   </delete>
@@ -36,9 +28,17 @@
       filetype, `size`, `time`
       )
     values (#{accountid,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
-      #{filetype,jdbcType=INTEGER}, #{size,jdbcType=INTEGER}, #{time,jdbcType=VARCHAR}
+      #{filetype,jdbcType=INTEGER}, #{size,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}
       )
   </insert>
+
+  <select id="findByAccountId" resultType="com.lzheng.coolpan.domain.Files">
+  select * from  files where  accountid=#{id}
+</select>
+  <select id="findByType" resultType="com.lzheng.coolpan.domain.Files">
+  select f.filename,f.size,f.time from  files f where f.accountid=#{id} and f.filetype=#{type}
+</select>
+
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Files" useGeneratedKeys="true">
     insert into files
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -75,7 +75,7 @@
         #{filetype,jdbcType=INTEGER},
       </if>
       <if test="size != null">
-        #{size,jdbcType=INTEGER},
+        #{size,jdbcType=VARCHAR},
       </if>
       <if test="time != null">
         #{time,jdbcType=VARCHAR},
@@ -98,7 +98,7 @@
         filetype = #{filetype,jdbcType=INTEGER},
       </if>
       <if test="size != null">
-        `size` = #{size,jdbcType=INTEGER},
+        `size` = #{size,jdbcType=VARCHAR},
       </if>
       <if test="time != null">
         `time` = #{time,jdbcType=VARCHAR},
@@ -112,7 +112,7 @@
       filename = #{filename,jdbcType=VARCHAR},
       filepath = #{filepath,jdbcType=VARCHAR},
       filetype = #{filetype,jdbcType=INTEGER},
-      `size` = #{size,jdbcType=INTEGER},
+      `size` = #{size,jdbcType=VARCHAR},
       `time` = #{time,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>

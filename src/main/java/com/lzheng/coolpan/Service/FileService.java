@@ -29,5 +29,8 @@ public class FileService {
     public List<Files> findFilesByType(Integer id,Integer type){
         return dao.findByType(id,type);
     }
+    public void insert(Files files){
+        dao.insertSelective(files);
+    }
 
 }

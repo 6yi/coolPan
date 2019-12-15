@@ -31,6 +31,10 @@
 <!--            </table>-->
         </div>
     </div>
+<div class="layui-upload-drag" id="test" style="width: 300px;padding-right: 10px;position: absolute;right: 30px;bottom: 8%;z-index:999">
+    <i class="layui-icon"></i>
+    <p>点击上传，或将文件拖拽到此处</p>
+</div>
     <div class="layui-footer">
         <!-- 底部固定区域 -->
 
@@ -38,26 +42,38 @@
     </div>
 </body>
 <script>
-    layui.use(['element','table'], function(){
-        var element = layui.element
-        ,table = layui.table;
-
-        table.render({
-            elem: '#demo'
-            ,height: 700
-            ,url: '/demo/table/user/'
-            ,page: true
-            ,cols: [
-                [
-                {type:'checkbox'},
-                {field: 'filename', title: '文件名', width:300, fixed: 'left'}
-                ,{field: 'filesize', title: '文件大小', width:180,sort: true}
-                ,{field: 'time', title: '创建时间', width:150, sort: true}
-                ,{field: 'download', title: '下载', width:90}
-                ,{field: 'deleted', title: '删除', width:90}
+    function type(typeid){
+        layui.use('table',function () {
+            var table = layui.table;
+            table.render({
+                elem: '#demo'
+                ,height: 800
+                ,url: '/files/type?type='+typeid
+                ,page: true
+                ,cols: [
+                    [
+                        {type:'checkbox'},
+                        {field: 'filename', title: '文件名', width:300}
+                        ,{field: 'size', title: '文件大小', width:180,sort: true}
+                        ,{field: 'time', title: '创建时间', width:150, sort: true}
+                        ,{field: 'download', title: '下载', width:90}
+                        ,{field: 'deleted', title: '删除', width:90}
+                    ]
                 ]
-            ]
+            });
+        })
+    }
+
+    layui.use(['element','table','upload'], function(){
+        var element = layui.element,upload = layui.upload,$ = layui.jquery;
+        upload.render({
+            elem: '#test'
+            ,url: '/files/upload'
+            ,done: function(res){
+                console.log(res)
+            }
         });
+
     });
 </script>
 
