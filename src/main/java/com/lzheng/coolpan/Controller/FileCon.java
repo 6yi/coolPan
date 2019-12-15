@@ -6,7 +6,7 @@ import com.lzheng.coolpan.domain.Files;
 import com.lzheng.coolpan.domain.retDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName FileCon
@@ -33,11 +34,12 @@ public class FileCon {
     @Autowired
     private FileService service;
 
-    private static java.text.DecimalFormat   df   =new   java.text.DecimalFormat("#.00");
+
     @Value("${file.SavePath}")
     private String SavePath;
 
     private Account account;
+
 
     @RequestMapping("/files")
     public String files(HttpServletRequest request){
@@ -83,25 +85,33 @@ public class FileCon {
 
     @ResponseBody
     @PostMapping("/files/upload")
-    public String upload(@RequestParam("file") MultipartFile file,HttpServletRequest request) {
+    public Map<String,Object> upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+        Map<String,Object> map=new HashMap<>();
         if (file.isEmpty()) {
-            return "上传失败，请选择文件";
+            map.put("msg","error");
+            map.put("code",0);
+            return map;
         }
         String fileName = file.getOriginalFilename();
+
         File dest = new File(SavePath + fileName);
         try {
             file.transferTo(dest);
             Files newfile=new Files();
-            newfile.setFilename(file.getName());
+            newfile.setFilename(fileName);
             newfile.setSize(String.format("%.2f",(file.getSize()/1024000.0))+"MB");
             Account account= (Account)request.getSession().getAttribute("account");
             newfile.setAccountid(account.getId());
             service.insert(newfile);
-            return "上传成功";
+            map.put("msg","ok");
+            map.put("code",200);
+            return map;
         } catch (IOException e) {
-                e.printStackTrace();
+            map.put("msg","error");
+            map.put("code",0);
+
         }
-        return "上传失败！";
+        return map;
     }
 
     @ResponseBody
@@ -118,10 +128,8 @@ public class FileCon {
         }else{
             files=service.findFilesByType(account.getId(),type);
         }
-
-
         if (files!=null){
-           filesArry=files.toArray();
+            filesArry=files.toArray();
         }
         date.setData(filesArry);
         date.setCount(filesArry.length);
