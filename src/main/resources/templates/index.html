@@ -72,14 +72,10 @@
                 ]
             });
 
-            table.on('checkbox(demo)', function(obj){
-                console.log(obj)
-            });
         })
     }
-
     layui.use(['element','table','upload'], function(){
-        var element = layui.element,upload = layui.upload;
+        var element = layui.element,upload = layui.upload, table=layui.table;
         upload.render({
             elem: '#test'
             ,url: '/files/upload',
@@ -87,15 +83,27 @@
             progress: function(n){
                 var percent = n + '%';
                 console.log(percent);
-                element.progress('de', percent); //可配合 layui 进度条元素使用
+                element.progress('de', percent);
             }
             ,done: function(res){
                 console.log(res)
             },error: function(){
-            //请求异常回调
+                alert("上传失败!");
             }
         });
-
+        table.on('tool(demo)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.msg('ID：'+ data.id);
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除么', function(index){
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if(obj.event === 'edit'){
+                layer.alert('编辑行：<br>'+ JSON.stringify(data))
+            }
+        });
     });
 </script>
 
