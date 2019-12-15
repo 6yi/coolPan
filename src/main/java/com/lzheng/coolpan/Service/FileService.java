@@ -26,4 +26,8 @@ public class FileService {
         return dao.findByAccountId(id);
     }
 
+    public List<Files> findFilesByType(Integer id,Integer type){
+        return dao.findByType(id,type);
+    }
+
 }

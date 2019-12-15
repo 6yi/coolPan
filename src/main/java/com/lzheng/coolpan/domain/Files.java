@@ -9,26 +9,19 @@ import java.io.Serializable;
 public class Files implements Serializable {
     private Integer id;
 
-    private Integer accountId;
+    private Integer accountid;
 
     private String filename;
 
     private String filepath;
 
-    private String filetype;
+    private Integer filetype;
+
+    private Integer size;
+
+    private String time;
 
     private static final long serialVersionUID = 1L;
-
-    @Override
-    public String toString() {
-        return "Files{" +
-                "id=" + id +
-                ", accountId=" + accountId +
-                ", filename='" + filename + '\'' +
-                ", filepath='" + filepath + '\'' +
-                ", filetype='" + filetype + '\'' +
-                '}';
-    }
 
     public Integer getId() {
         return id;
@@ -38,12 +31,12 @@ public class Files implements Serializable {
         this.id = id;
     }
 
-    public Integer getAccountId() {
-        return accountId;
+    public Integer getAccountid() {
+        return accountid;
     }
 
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
+    public void setAccountid(Integer accountid) {
+        this.accountid = accountid;
     }
 
     public String getFilename() {
@@ -62,11 +55,27 @@ public class Files implements Serializable {
         this.filepath = filepath;
     }
 
-    public String getFiletype() {
+    public Integer getFiletype() {
         return filetype;
     }
 
-    public void setFiletype(String filetype) {
+    public void setFiletype(Integer filetype) {
         this.filetype = filetype;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

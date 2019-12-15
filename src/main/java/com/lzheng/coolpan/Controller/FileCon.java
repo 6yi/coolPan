@@ -2,6 +2,8 @@ package com.lzheng.coolpan.Controller;
 
 import com.lzheng.coolpan.Service.FileService;
 import com.lzheng.coolpan.domain.Account;
+import com.lzheng.coolpan.domain.Files;
+import com.lzheng.coolpan.domain.retDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.List;
 
 /**
  * @ClassName FileCon
@@ -88,9 +91,27 @@ public class FileCon {
             file.transferTo(dest);
             return "上传成功";
         } catch (IOException e) {
-//           return "文件超过900M";
+                e.printStackTrace();
         }
         return "上传失败！";
+    }
+
+    @ResponseBody
+    @RequestMapping("/files/type")
+    public retDate findbyType(@RequestParam("type") Integer type,HttpServletRequest request){
+        retDate date=new retDate();
+        date.setCode("200");
+        date.setMsg("");
+        Object[] filesArry={};
+        Account account= (Account)request.getSession().getAttribute("account");
+        List<Files> files=service.findFilesByType(account.getId(),type);
+
+        if (files!=null){
+           filesArry=files.toArray();
+        }
+        date.setData(filesArry);
+        date.setCount(filesArry.length);
+        return date;
     }
 
 

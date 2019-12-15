@@ -3,13 +3,15 @@
 <mapper namespace="com.lzheng.coolpan.dao.FilesDao">
   <resultMap id="BaseResultMap" type="com.lzheng.coolpan.domain.Files">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="account_id" jdbcType="INTEGER" property="accountId" />
+    <result column="accountid" jdbcType="INTEGER" property="accountid" />
     <result column="filename" jdbcType="VARCHAR" property="filename" />
     <result column="filepath" jdbcType="VARCHAR" property="filepath" />
-    <result column="filetype" jdbcType="VARCHAR" property="filetype" />
+    <result column="filetype" jdbcType="INTEGER" property="filetype" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, account_id, filename, filepath, filetype
+    id, accountid, filename, filepath, filetype, `size`, `time`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -19,24 +21,29 @@
   </select>
 
   <select id="findByAccountId" resultType="com.lzheng.coolpan.domain.Files">
-    select * from files where accountid=#{accountId}
-  </select>
+  select * from files where accountid=#{id}
+</select>
+  <select id="findByType" resultType="com.lzheng.coolpan.domain.Files">
+  select f.filename,f.size,f.time from  files f where f.accountid=#{id} and f.filetype=#{type}
+</select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from files
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Files" useGeneratedKeys="true">
-    insert into files (account_id, filename, filepath, 
-      filetype)
-    values (#{accountId,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
-      #{filetype,jdbcType=VARCHAR})
+    insert into files (accountid, filename, filepath, 
+      filetype, `size`, `time`
+      )
+    values (#{accountid,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
+      #{filetype,jdbcType=INTEGER}, #{size,jdbcType=INTEGER}, #{time,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Files" useGeneratedKeys="true">
     insert into files
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="accountId != null">
-        account_id,
+      <if test="accountid != null">
+        accountid,
       </if>
       <if test="filename != null">
         filename,
@@ -47,10 +54,16 @@
       <if test="filetype != null">
         filetype,
       </if>
+      <if test="size != null">
+        `size`,
+      </if>
+      <if test="time != null">
+        `time`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="accountId != null">
-        #{accountId,jdbcType=INTEGER},
+      <if test="accountid != null">
+        #{accountid,jdbcType=INTEGER},
       </if>
       <if test="filename != null">
         #{filename,jdbcType=VARCHAR},
@@ -59,15 +72,21 @@
         #{filepath,jdbcType=VARCHAR},
       </if>
       <if test="filetype != null">
-        #{filetype,jdbcType=VARCHAR},
+        #{filetype,jdbcType=INTEGER},
+      </if>
+      <if test="size != null">
+        #{size,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.lzheng.coolpan.domain.Files">
     update files
     <set>
-      <if test="accountId != null">
-        account_id = #{accountId,jdbcType=INTEGER},
+      <if test="accountid != null">
+        accountid = #{accountid,jdbcType=INTEGER},
       </if>
       <if test="filename != null">
         filename = #{filename,jdbcType=VARCHAR},
@@ -76,17 +95,25 @@
         filepath = #{filepath,jdbcType=VARCHAR},
       </if>
       <if test="filetype != null">
-        filetype = #{filetype,jdbcType=VARCHAR},
+        filetype = #{filetype,jdbcType=INTEGER},
+      </if>
+      <if test="size != null">
+        `size` = #{size,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        `time` = #{time,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lzheng.coolpan.domain.Files">
     update files
-    set account_id = #{accountId,jdbcType=INTEGER},
+    set accountid = #{accountid,jdbcType=INTEGER},
       filename = #{filename,jdbcType=VARCHAR},
       filepath = #{filepath,jdbcType=VARCHAR},
-      filetype = #{filetype,jdbcType=VARCHAR}
+      filetype = #{filetype,jdbcType=INTEGER},
+      `size` = #{size,jdbcType=INTEGER},
+      `time` = #{time,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -1,16 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>登录</title>
+    <!-- Bootstrap core CSS -->
+    <link href="asserts/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="asserts/css/signin.css" th:href="@{/css/signin.css}" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 </head>
-<body>
-<p th:text="${msg}"></p>
-<form action="/in" method="post">
-    <p>account :</p><input type="text" name="name"/>
-    <br/>
-    <p>password:</p><input type="password" name="password"/>
-    <input type="submit">
+
+<body class="text-center">
+<form class="form-signin" action="dashboard.html" th:action="@{/in}" method="post">
+    <!--			<img class="mb-4" th:src="@{/img/title.png}" src="../img/tigle.png" alt="" width="120" height="120">-->
+    <h1 class="h3 mb-3 font-weight-normal" >登录</h1>
+    <p style="color: red" th:text="${session.msg}"/>
+    <label class="sr-only" >Username</label>
+    <input type="text" class="form-control" name="name"  placeholder="Username" required="" autofocus="">
+    <label class="sr-only">Password</label>
+    <input type="password"  name="password" class="form-control"  placeholder="Password" required="">
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
+    <p class="mt-5 mb-3 text-muted">© 2019-2019</p>
+    <!--			<a class="btn btn-sm" th:href="@{/success.html(l='zh_CN')}">中文</a>-->
+    <!--			<a class="btn btn-sm" th:href="@{/success.html(l='en_EN')}">English</a>-->
 </form>
+
 </body>
+
 </html>

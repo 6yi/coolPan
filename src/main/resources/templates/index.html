@@ -3,10 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>CoolPan</title>
+    <link href="asserts/css/signin.css" th:href="@{/layui/css/layui.css}" rel="stylesheet">
+    <script src="JQ/jquery-3.3.1.min.js" th:src="@{/layui/layui.js}"></script>
+    <style>
+        .layui-container{
+            height: 100%;
+            color: gray;
+        }
+    </style>
 </head>
 <body>
+<div th:replace="header::header"></div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding-left: 15%;width: 50%">
+            <table id="demo"></table>
+<!--            <table class="layui-table" lay-data="{height:315, url:'/demo/table/user/', page:true, id:'test'}" lay-filter="test">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th lay-data="field: 'filename', title: '文件名', width:300, fixed: 'left'">ID</th>-->
+<!--                    <th lay-data="{field: 'filesize', title: '文件大小', width:180,sort: true}">用户名</th>-->
+<!--                    <th lay-data="{field: 'time', title: '创建时间', width:150, sort: true}">性别</th>-->
+<!--                    <th lay-data="{field: 'download', title: '下载', width:90}">城市</th>-->
+<!--                    <th lay-data="{field: 'deleted', title: '删除', width:90}">签名</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--            </table>-->
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
 
-<a href="/files">我的文件</a>
-
+        © lzhengycy.club || CoolPan
+    </div>
 </body>
+<script>
+    layui.use(['element','table'], function(){
+        var element = layui.element
+        ,table = layui.table;
+
+        table.render({
+            elem: '#demo'
+            ,height: 700
+            ,url: '/demo/table/user/'
+            ,page: true
+            ,cols: [
+                [
+                {type:'checkbox'},
+                {field: 'filename', title: '文件名', width:300, fixed: 'left'}
+                ,{field: 'filesize', title: '文件大小', width:180,sort: true}
+                ,{field: 'time', title: '创建时间', width:150, sort: true}
+                ,{field: 'download', title: '下载', width:90}
+                ,{field: 'deleted', title: '删除', width:90}
+                ]
+            ]
+        });
+    });
+</script>
+
 </html>
