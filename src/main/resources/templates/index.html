@@ -17,7 +17,7 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <div style="padding-left: 20%;width: 50%">
-            <table id="demo" style="width: 809px;"></table>
+            <table id="demo" style="width: 809px;" lay-filter="tab"></table>
             <script type="text/html" id="barDemo">
                 <a class="layui-btn layui-btn-xs" lay-event="edit">下载</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -91,8 +91,9 @@
                 alert("上传失败!");
             }
         });
-        table.on('tool(demo)', function(obj){
+        table.on('tool(tab)', function(obj){
             var data = obj.data;
+
             if(obj.event === 'detail'){
                 layer.msg('ID：'+ data.id);
             } else if(obj.event === 'del'){
