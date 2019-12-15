@@ -20,7 +20,7 @@
         <div style="padding-left: 20%;width: 50%">
             <table id="demo" style="width: 809px;" lay-filter="tab"></table>
             <script type="text/html" id="barDemo">
-                <a class="layui-btn layui-btn-xs" lay-event="edit" >下载</a>
+                <a class="layui-btn layui-btn-xs" lay-event="download" >下载</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
             </script>
 
@@ -99,16 +99,16 @@
                     obj.del();
                     layer.close(index);
                 });
-            } else if(obj.event === 'edit'){
+            } else if(obj.event === 'download'){
                layer.open({
                    type: 2,
                    shade: false,
-                   resize: true,
+                   resize: false,
                    offset: 'rb',
                    icon: 0,
-                   title:'下載中',
+                   title:'开始下载',
+                   time:3000,
                    maxmin: true,
-                   //链接地址后台路径
                    content: "/files/download?filename="+data.filename,
                    success:function(){
                        layer.closeAll();

@@ -52,10 +52,10 @@ public class FileCon {
     }
 
     @RequestMapping("/files/download")
-    public void Download(HttpServletResponse res, @RequestParam("filename") String fileName) {
+    public void Download(HttpServletResponse res, @RequestParam("filename") String fileName) throws UnsupportedEncodingException {
         res.setHeader("content-type", "application/octet-stream");
         res.setContentType("application/octet-stream");
-        res.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+        res.setHeader("Content-Disposition", "attachment; filename=" + new String(fileName.getBytes("UTF-8"),"ISO-8859-1"));
         byte[] buff = new byte[1024];
         BufferedInputStream bis = null;
         OutputStream os = null;
