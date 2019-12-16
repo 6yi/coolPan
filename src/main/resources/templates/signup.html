@@ -19,16 +19,15 @@
 <form class="form-signin" action="dashboard.html" th:action="@{/sign/in}" method="post">
     <!--			<img class="mb-4" th:src="@{/img/title.png}" src="../img/tigle.png" alt="" width="120" height="120">-->
     <h1 class="h3 mb-3 font-weight-normal" >登录</h1>
-    <p style="color: red" th:text="${session.msg}"/>
+    <p style="color: red" th:text="${session.signmsg}"/>
     <label class="sr-only" >用户名</label>
     <input type="text" class="form-control" name="name"  placeholder="Username" required="" autofocus="">
     <label class="sr-only">密码</label>
     <input type="password"  name="password" class="form-control"  placeholder="Password" required="">
-    <br/>
     <input type="password"  name="password2" class="form-control"  placeholder="重复输入密码" required="">
-
     <label class="sr-only">E-mail</label>
     <input type="email" name="mail" class="form-control" placeholder="E-mail">
+    <br>
     <button class="btn btn-lg btn-primary btn-block" type="submit" >Sign up</button>
     <p class="mt-5 mb-3 text-muted">© 2019-2019</p>
     <!--			<a class="btn btn-sm" th:href="@{/success.html(l='zh_CN')}">中文</a>-->
@@ -39,9 +38,7 @@
 
 </body>
 <script>
-    function sumb() {
-        
-    }
+
 </script>
 
 </html>

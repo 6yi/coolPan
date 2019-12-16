@@ -44,21 +44,36 @@ public class AccountService {
     public void Firstsign(String name,String password,String mail) throws AccountError {
         Account account=accountDao.selectByName(name);
         if(account!=null){//已经注册过
-            if (account.getStatus()==1)
-            throw new Registered();
-            else
-            throw new notActive();
+            if (account.getStatus()==1){
+                throw new Registered();
+            }else{
+                throw new notActive();
+            }
+
         }
+        account=new Account();
         account.setName(name);
         account.setPassword(password);
         account.setEmial(mail);
+        account.setStatus(0);
         int code=(int) (new Date().getTime()%1000000);
         account.setNowsize(code);//这里先给一串随机数字,用来验证用户是否激活
         account.setMaxsize(50000);
+        String ename=account.getName();
+        //开启线程发生邮件
         try {
-            mailService.sendSimpleMail(mail,code,account.getName());
+            new Thread(){
+                @Override
+                public void run() {
+                    try {
+                        mailService.sendSimpleMail(mail,code,ename);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
             accountDao.insert(account);
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

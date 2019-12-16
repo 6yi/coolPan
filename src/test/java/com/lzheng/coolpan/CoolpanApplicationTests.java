@@ -58,7 +58,7 @@ class CoolpanApplicationTests {
 
     @Test
     void contextLoads5() throws UnsupportedEncodingException {
-        mailService.sendSimpleMail("lzhengycy@outlook.com",43787);
+//        mailService.sendSimpleMail("lzhengycy@outlook.com",43787);
     }
 
 }
