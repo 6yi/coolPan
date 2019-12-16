@@ -36,7 +36,7 @@
   select * from  files where  accountid=#{id}
 </select>
   <select id="findByType" resultType="com.lzheng.coolpan.domain.Files">
-  select f.filename,f.size,f.time from  files f where f.accountid=#{id} and f.filetype=#{type}
+  select * from  files f where f.accountid=#{id} and f.filetype=#{type}
 </select>
 
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Files" useGeneratedKeys="true">

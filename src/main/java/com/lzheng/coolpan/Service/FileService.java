@@ -6,6 +6,7 @@ import com.lzheng.coolpan.domain.Files;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -31,6 +32,13 @@ public class FileService {
     }
     public void insert(Files files){
         dao.insertSelective(files);
+    }
+
+    public void delete(Integer id,String accountPath,String filename){
+        dao.deleteByPrimaryKey(id);
+        File file=new File(accountPath+"/"+filename);
+        if(file.exists()&&file.isFile())
+            file.delete();
     }
 
 }

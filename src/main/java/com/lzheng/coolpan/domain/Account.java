@@ -18,15 +18,22 @@ public class Account implements Serializable {
 
     private Integer maxsize;
 
-    private List<Files> filesList;
+    private Integer nowsize;
 
     public List<Files> getFilesList() {
-        return filesList;
+        return FilesList;
     }
 
     public void setFilesList(List<Files> filesList) {
-        this.filesList = filesList;
+        FilesList = filesList;
     }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    private List<Files> FilesList;
+
 
     private static final long serialVersionUID = 1L;
 
@@ -68,5 +75,13 @@ public class Account implements Serializable {
 
     public void setMaxsize(Integer maxsize) {
         this.maxsize = maxsize;
+    }
+
+    public Integer getNowsize() {
+        return nowsize;
+    }
+
+    public void setNowsize(Integer nowsize) {
+        this.nowsize = nowsize;
     }
 }

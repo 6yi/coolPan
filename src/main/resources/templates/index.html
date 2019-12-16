@@ -19,25 +19,13 @@
         <!-- 内容主体区域 -->
         <div style="padding-left: 20%;width: 50%">
             <table id="demo" style="width: 809px;" lay-filter="tab"></table>
-
             <script type="text/html" id="barDemo">
                 <a class="layui-btn layui-btn-xs" lay-event="download" >下载</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
             </script>
-<!--            <table class="layui-table" lay-data="{height:315, url:'/demo/table/user/', page:true, id:'test'}" lay-filter="test">-->
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                    <th lay-data="field: 'filename', title: '文件名', width:300, fixed: 'left'">ID</th>-->
-<!--                    <th lay-data="{field: 'filesize', title: '文件大小', width:180,sort: true}">用户名</th>-->
-<!--                    <th lay-data="{field: 'time', title: '创建时间', width:150, sort: true}">性别</th>-->
-<!--                    <th lay-data="{field: 'download', title: '下载', width:90}">城市</th>-->
-<!--                    <th lay-data="{field: 'deleted', title: '删除', width:90}">签名</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--            </table>-->
             <div class="layui-btn-group demoTable" id="all" style="display: none">
-                <button class="layui-btn" data-type="getCheckData">下载选中数据</button>
-                <button class="layui-btn" data-type="getCheckLength">删除选中数据</button>
+                <button class="layui-btn" data-type="getDownload">下载选中数据</button>
+                <button class="layui-btn" data-type="getDelete">删除选中数据</button>
             </div>
         </div>
 
@@ -61,7 +49,7 @@
             var table = layui.table;
             table.render({
                 elem: '#demo'
-                ,height: 760,
+                ,height: 730,
                 width:866
                 ,url: '/files/type?type='+typeid,
                 loading: true
@@ -75,7 +63,6 @@
                     ]
                 ]
             });
-
         })
     }
     layui.use(['element','table','upload'], function(){
@@ -99,31 +86,52 @@
         table.on('checkbox(demo)', function(obj){
             console.log(obj)
         });
-
-        var $ = layui.$, active = {
-            getCheckData: function(){ //获取选中数据
+        var $1 = layui.$, active = {
+            getDownload: function(){
                 var checkStatus = table.checkStatus('demo')
                     ,data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
+                $(function () {
+                    $.each(data, function(index, value) {
+                        layer.open({
+                            type: 2,
+                            shade: false,
+                            resize: false,
+                            offset: 'rb',
+                            icon: 0,
+                            title:'开始下载',
+                            time:3000,
+                            maxmin: true,
+                            content: "/files/download?filename="+value.filename,
+                            success:function(){
+                                layer.closeAll();
+                                layer.msg(res.msg, {
+                                    icon: 5,
+                                    time: 1500
+                                });
+                            }
+                        });
+                    });
+                })
             }
-            ,getCheckLength: function(){ //获取选中数目
+            ,getDelete: function(){ //获取选中数目
                 var checkStatus = table.checkStatus('demo')
                     ,data = checkStatus.data;
                 layer.msg('选中了：'+ data.length + ' 个');
             }
         };
 
-        $('.demoTable .layui-btn').on('click', function(){
+        $1('.demoTable .layui-btn').on('click', function(){
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
-        
+
         table.on('tool(tab)', function(obj){
             var data = obj.data;
            if(obj.event === 'del'){
                 layer.confirm('真的删除么', function(index){
                     obj.del();
                     layer.close(index);
+                    $.ajax('/')
                 });
             } else if(obj.event === 'download'){
                layer.open({

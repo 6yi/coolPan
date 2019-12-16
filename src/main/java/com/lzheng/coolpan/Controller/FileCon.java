@@ -1,19 +1,16 @@
 package com.lzheng.coolpan.Controller;
-
 import com.lzheng.coolpan.Service.FileService;
 import com.lzheng.coolpan.domain.Account;
 import com.lzheng.coolpan.domain.Files;
 import com.lzheng.coolpan.domain.retDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -38,17 +35,19 @@ public class FileCon {
     @Value("${file.SavePath}")
     private String SavePath;
 
+
     private Account account;
 
 
     @RequestMapping("/files")
     public String files(HttpServletRequest request){
         if (account==null){
-            Account account=(Account)request.getSession().getAttribute("account");
-            account.setFilesList(service.findFilesById(account.getId()));
-            request.getSession().setAttribute("files",account.getFilesList());
+            account=(Account)request.getSession().getAttribute("account");
+//            account.setFilesList(service.findFilesById(account.getId()));
+//            request.getSession().setAttribute("files",account.getFilesList());
         }
-        return "files";
+
+        return "index";
     }
 
     @RequestMapping("/files/download")
@@ -100,7 +99,7 @@ public class FileCon {
             Files newfile=new Files();
             newfile.setFilename(fileName);
             newfile.setSize(String.format("%.2f",(file.getSize()/1024000.0))+"MB");
-            Account account= (Account)request.getSession().getAttribute("account");
+//            Account account= (Account)request.getSession().getAttribute("account");
             newfile.setAccountid(account.getId());
             service.insert(newfile);
             map.put("msg","ok");
@@ -121,7 +120,7 @@ public class FileCon {
         date.setCode("0");
         date.setMsg("");
         Object[] filesArry={};
-        Account account= (Account)request.getSession().getAttribute("account");
+//        Account account= (Account)request.getSession().getAttribute("account");
         List<Files> files=null;
         if (type==6){
             files=service.findFilesById(account.getId());
@@ -135,6 +134,12 @@ public class FileCon {
         date.setCount(filesArry.length);
         return date;
     }
+
+    @RequestMapping("/files/delete")
+    public void delete(@RequestParam("filename") String filename,@RequestParam("id")Integer id,HttpServletRequest request){
+            service.delete(id,account.getSavefilename(),filename);
+    }
+
 
 
 }
