@@ -33,20 +33,23 @@ public class MailService {
 
     @Value("${mail.content}")
     private String content;
+    @Value("${mail.address}")
+    private String address;
 
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendSimpleMail(String to) throws UnsupportedEncodingException {
+    public void sendSimpleMail(String to,int code) throws UnsupportedEncodingException {
         SimpleMailMessage message = new SimpleMailMessage();
         String fromByte = new String((from + " <" + fromMail + ">")
                 .getBytes("UTF-8"));
         message.setTo(to);
         message.setSubject(subject);
-        message.setText(content+"www.lzhengycy.club");
+        message.setText(content+address+"/sign/v?code="+code);
         message.setFrom(fromByte);
         mailSender.send(message);
-
     }
+
+
 
 }

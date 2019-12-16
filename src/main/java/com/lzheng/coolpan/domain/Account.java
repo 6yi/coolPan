@@ -1,7 +1,6 @@
 package com.lzheng.coolpan.domain;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * account
@@ -20,20 +19,9 @@ public class Account implements Serializable {
 
     private Integer nowsize;
 
-    public List<Files> getFilesList() {
-        return FilesList;
-    }
+    private String emial;
 
-    public void setFilesList(List<Files> filesList) {
-        FilesList = filesList;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    private List<Files> FilesList;
-
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
@@ -83,5 +71,21 @@ public class Account implements Serializable {
 
     public void setNowsize(Integer nowsize) {
         this.nowsize = nowsize;
+    }
+
+    public String getEmial() {
+        return emial;
+    }
+
+    public void setEmial(String emial) {
+        this.emial = emial;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

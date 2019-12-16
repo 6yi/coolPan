@@ -8,9 +8,11 @@
     <result column="savefilename" jdbcType="VARCHAR" property="savefilename" />
     <result column="maxsize" jdbcType="INTEGER" property="maxsize" />
     <result column="nowsize" jdbcType="INTEGER" property="nowsize" />
+    <result column="emial" jdbcType="VARCHAR" property="emial" />
+    <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, `name`, `password`, savefilename, maxsize, nowsize
+    id, `name`, `password`, savefilename, maxsize, nowsize, emial, `status`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -24,9 +26,11 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Account" useGeneratedKeys="true">
     insert into account (`name`, `password`, savefilename, 
-      maxsize, nowsize)
+      maxsize, nowsize, emial, 
+      `status`)
     values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{savefilename,jdbcType=VARCHAR}, 
-      #{maxsize,jdbcType=INTEGER}, #{nowsize,jdbcType=INTEGER})
+      #{maxsize,jdbcType=INTEGER}, #{nowsize,jdbcType=INTEGER}, #{emial,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Account" useGeneratedKeys="true">
     insert into account
@@ -46,6 +50,12 @@
       <if test="nowsize != null">
         nowsize,
       </if>
+      <if test="emial != null">
+        emial,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -62,6 +72,12 @@
       </if>
       <if test="nowsize != null">
         #{nowsize,jdbcType=INTEGER},
+      </if>
+      <if test="emial != null">
+        #{emial,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -83,6 +99,12 @@
       <if test="nowsize != null">
         nowsize = #{nowsize,jdbcType=INTEGER},
       </if>
+      <if test="emial != null">
+        emial = #{emial,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -92,10 +114,12 @@
       `password` = #{password,jdbcType=VARCHAR},
       savefilename = #{savefilename,jdbcType=VARCHAR},
       maxsize = #{maxsize,jdbcType=INTEGER},
-      nowsize = #{nowsize,jdbcType=INTEGER}
+      nowsize = #{nowsize,jdbcType=INTEGER},
+      emial = #{emial,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByName" resultMap="BaseResultMap">
-    select * from account where name=#{id}
-  </select>
+  select * from account where name=#{id}
+</select>
 </mapper>
