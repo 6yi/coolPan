@@ -28,7 +28,7 @@ public class AccountService {
 
     @Value("${file.SavePath}")
     private String SavePath;
-    
+
     @Autowired
     private MailService mailService;
 
@@ -56,15 +56,15 @@ public class AccountService {
         account.setNowsize(code);//这里先给一串随机数字,用来验证用户是否激活
         account.setMaxsize(50000);
         try {
-            mailService.sendSimpleMail(mail,code);
+            mailService.sendSimpleMail(mail,code,account.getName());
             accountDao.insert(account);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean verifyCode(int id,int code){
-            Account account=accountDao.selectByPrimaryKey(id);
+    public boolean verifyCode(String name,int code){
+            Account account=accountDao.selectByName(name);
             if (account!=null&&account.getNowsize()==code){
                 account.setNowsize(0);
                 account.setStatus(1);

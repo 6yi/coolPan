@@ -39,13 +39,13 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendSimpleMail(String to,int code) throws UnsupportedEncodingException {
+    public void sendSimpleMail(String to,int code,String name) throws UnsupportedEncodingException {
         SimpleMailMessage message = new SimpleMailMessage();
         String fromByte = new String((from + " <" + fromMail + ">")
                 .getBytes("UTF-8"));
         message.setTo(to);
         message.setSubject(subject);
-        message.setText(content+address+"/sign/v?code="+code);
+        message.setText(content+address+"/sign/verify?code="+code+"&id="+name);
         message.setFrom(fromByte);
         mailSender.send(message);
     }

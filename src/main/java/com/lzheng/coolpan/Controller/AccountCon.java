@@ -72,9 +72,10 @@ public class AccountCon {
      * @return
      * @Description 注册
      **/
-    @RequestMapping("/sign/in")
+    @PostMapping("/sign/in")
     public String sign(@RequestParam("name")String name
                     ,@RequestParam("password")String password
+                    ,@RequestParam("password2")String password2
                     ,@RequestParam("mail")String mail
                     ,HttpServletRequest request
                     ,HttpServletResponse response) throws ServletException, IOException {
@@ -104,9 +105,25 @@ public class AccountCon {
      * @return
      * @Description  激活
      **/
-    @RequestMapping("/sign/v")
-    public String verify(@RequestParam("code") int code){
-
+    @RequestMapping("/sign/verify")
+    public String verify(@RequestParam("code") int code
+            ,@RequestParam("id") String name
+            ,HttpServletRequest request
+            ,HttpServletResponse response) throws ServletException, IOException {
+        Integer verifyNumber = (Integer)request.getSession().getAttribute("verifyNumber");
+        if (verifyNumber==null){
+            verifyNumber=1;
+        }else{
+            if (verifyNumber>4){
+                request.getSession().setAttribute("signmsg","验证失败次数过多");
+                request.getRequestDispatcher("/sign").forward(request,response);
+            }
+            verifyNumber++;
+        }
+        if(!accountService.verifyCode(name,code)){
+            return "verifyfail";
+        }
+        return "verifysuccess";
     }
 
 
