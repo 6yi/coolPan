@@ -30,7 +30,10 @@ public class AccountCon {
     private AccountService accountService;
 
     @RequestMapping("/login")
-    public String login(){
+    public String login(HttpServletRequest request){
+        if (request.getSession().getAttribute("account")!=null){
+            return "/files";
+        }
         return "login";
     }
 

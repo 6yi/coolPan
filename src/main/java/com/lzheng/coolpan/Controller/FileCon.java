@@ -14,9 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * @ClassName FileCon
@@ -51,7 +50,7 @@ public class FileCon {
     }
 
     @RequestMapping("/files/download")
-    public void Download(HttpServletResponse res, @RequestParam("filename") String fileName) throws UnsupportedEncodingException {
+    public void Download(HttpServletResponse res, @RequestParam("filepath") String filepath,@RequestParam("filename") String fileName) throws UnsupportedEncodingException {
         res.setHeader("content-type", "application/octet-stream");
         res.setContentType("application/octet-stream");
         res.setHeader("Content-Disposition", "attachment; filename=" + new String(fileName.getBytes("UTF-8"),"ISO-8859-1"));
@@ -61,7 +60,7 @@ public class FileCon {
         try {
             os = res.getOutputStream();
             bis = new BufferedInputStream(new FileInputStream(
-                    new File(SavePath + fileName )));
+                    new File(SavePath + filepath )));
             int i = bis.read(buff);
             while (i != -1) {
                 os.write(buff, 0, buff.length);
@@ -92,12 +91,14 @@ public class FileCon {
             return map;
         }
         String fileName = file.getOriginalFilename();
-
-        File dest = new File(SavePath + fileName);
+        String savedest=account.getSavefilename()+"/"+ UUID.randomUUID() +fileName;
+        File dest = new File(SavePath +savedest);
         try {
             file.transferTo(dest);
             Files newfile=new Files();
             newfile.setFilename(fileName);
+            newfile.setFilepath(savedest);
+            newfile.setTime(LocalDate.now().toString());
             newfile.setSize(String.format("%.2f",(file.getSize()/1024000.0))+"MB");
 //            Account account= (Account)request.getSession().getAttribute("account");
             newfile.setAccountid(account.getId());
@@ -108,7 +109,7 @@ public class FileCon {
         } catch (IOException e) {
             map.put("msg","error");
             map.put("code",0);
-
+            e.printStackTrace();
         }
         return map;
     }
@@ -136,8 +137,8 @@ public class FileCon {
     }
 
     @RequestMapping("/files/delete")
-    public void delete(@RequestParam("filename") String filename,@RequestParam("id")Integer id,HttpServletRequest request){
-            service.delete(id,account.getSavefilename(),filename);
+    public void delete(@RequestParam("filepath") String filepath,@RequestParam("id")Integer id,HttpServletRequest request){
+            service.delete(id,filepath);
     }
 
 

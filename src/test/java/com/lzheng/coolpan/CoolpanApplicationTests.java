@@ -12,7 +12,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.UUID;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -59,6 +61,7 @@ class CoolpanApplicationTests {
     @Test
     void contextLoads5() throws UnsupportedEncodingException {
 //        mailService.sendSimpleMail("lzhengycy@outlook.com",43787);
+        System.out.println(LocalDate.now());
     }
 
 }
