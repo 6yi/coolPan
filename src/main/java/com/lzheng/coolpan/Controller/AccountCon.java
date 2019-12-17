@@ -2,18 +2,26 @@ package com.lzheng.coolpan.Controller;
 
 import com.lzheng.coolpan.Error.AccountError;
 import com.lzheng.coolpan.Service.AccountService;
-import com.lzheng.coolpan.dao.AccountDao;
 import com.lzheng.coolpan.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName AccountCon
@@ -32,7 +40,7 @@ public class AccountCon {
     @RequestMapping("/login")
     public String login(HttpServletRequest request){
         if (request.getSession().getAttribute("account")!=null){
-            return "/files";
+            return "index";
         }
         return "login";
     }
@@ -69,6 +77,32 @@ public class AccountCon {
         return "signup";
     }
 
+    @ResponseBody
+    @PostMapping("/Validated")
+    public Map<String,Object> Validated(@Validated Account account
+                                        ,@RequestParam("password2")String password2
+                                        ,BindingResult bindingResult
+                                        ,HttpServletRequest request
+                                        ,HttpServletResponse response){
+
+        Map<String,Object> map=new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            List<ObjectError> errorList = bindingResult.getAllErrors();
+            List<String> mesList=new ArrayList<String>();
+            for (int i = 0; i < errorList.size(); i++) {
+                mesList.add(errorList.get(i).getDefaultMessage());
+                System.out.println(errorList.get(i).getDefaultMessage());
+            }
+            map.put("status", false);
+            map.put("error", mesList);
+
+        }else {
+            map.put("status", true);
+        }
+        return map;
+    }
+
+
     /**
      * @author lzheng
      * @date 2019/12/16
@@ -76,12 +110,12 @@ public class AccountCon {
      * @Description 注册
      **/
     @PostMapping("/sign/in")
-    public String sign(@RequestParam("name")String name
-                    ,@RequestParam("password")String password
+    public String sign(@Validated Account account
                     ,@RequestParam("password2")String password2
-                    ,@RequestParam("mail")String mail
+                    ,BindingResult bindingResult
                     ,HttpServletRequest request
                     ,HttpServletResponse response) throws ServletException, IOException {
+
 
         Integer signNumber = (Integer)request.getSession().getAttribute("signNumber");
         if (signNumber==null){
@@ -94,7 +128,7 @@ public class AccountCon {
             signNumber++;
         }
         try {
-            accountService.Firstsign(name, password,mail);
+            accountService.Firstsign(account.getName(), account.getPassword(),account.getEmial());
         } catch (AccountError accountError) {
             request.getSession().setAttribute("signmsg",accountError.getMessage());
             request.getRequestDispatcher("/sign").forward(request,response);
@@ -127,6 +161,19 @@ public class AccountCon {
             return "verifyfail";
         }
         return "verifysuccess";
+    }
+
+    /**
+     * @author lzheng
+     * @date 2019/12/17
+     * @return
+     * @Description 退出
+     **/
+
+    @RequestMapping("/exit")
+    public String exit(HttpServletRequest request){
+        request.getSession().invalidate();
+        return "login";
     }
 
 

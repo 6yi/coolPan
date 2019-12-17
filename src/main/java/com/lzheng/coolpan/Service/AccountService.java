@@ -42,6 +42,7 @@ public class AccountService {
      * @Description 注册
      **/
     public void Firstsign(String name,String password,String mail) throws AccountError {
+
         Account account=accountDao.selectByName(name);
         if(account!=null){//已经注册过
             if (account.getStatus()==1){

@@ -1,5 +1,9 @@
 package com.lzheng.coolpan.domain;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -9,8 +13,12 @@ import java.io.Serializable;
 public class Account implements Serializable {
     private Integer id;
 
+    @NotEmpty(message="请输入用户名!")
+    @Size(min = 6, max = 30, message = "2<长度<30")
     private String name;
 
+    @NotNull(message = "用户密码不能为空")
+    @Size(min = 6, max = 30, message = "2<长度<30")
     private String password;
 
     private String savefilename;
@@ -18,7 +26,7 @@ public class Account implements Serializable {
     private Integer maxsize;
 
     private Integer nowsize;
-
+    @Email(message = "邮件格式不对")
     private String emial;
 
     private Integer status;

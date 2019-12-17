@@ -35,16 +35,11 @@ public class FileCon {
     private String SavePath;
 
 
-    private Account account;
+//    private Account account;
 
 
     @RequestMapping("/files")
     public String files(HttpServletRequest request){
-        if (account==null){
-            account=(Account)request.getSession().getAttribute("account");
-//            account.setFilesList(service.findFilesById(account.getId()));
-//            request.getSession().setAttribute("files",account.getFilesList());
-        }
 
         return "index";
     }
@@ -91,6 +86,7 @@ public class FileCon {
             return map;
         }
         String fileName = file.getOriginalFilename();
+        Account account= (Account)request.getSession().getAttribute("account");
         String savedest=account.getSavefilename()+"/"+ UUID.randomUUID() +fileName;
         File dest = new File(SavePath +savedest);
         try {
@@ -123,6 +119,7 @@ public class FileCon {
         Object[] filesArry={};
 //        Account account= (Account)request.getSession().getAttribute("account");
         List<Files> files=null;
+        Account account= (Account)request.getSession().getAttribute("account");
         if (type==6){
             files=service.findFilesById(account.getId());
         }else{
