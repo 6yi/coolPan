@@ -4,6 +4,7 @@ import com.lzheng.coolpan.Error.AccountError;
 import com.lzheng.coolpan.Service.AccountService;
 import com.lzheng.coolpan.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,9 @@ import java.io.IOException;
 
 public class AccountCon {
 
+    @Value("${account.signup}")
+    private int anInt;
+
     @Autowired
     private AccountService accountService;
 
@@ -44,6 +48,8 @@ public class AccountCon {
                      HttpServletRequest request,
                      HttpServletResponse response) throws ServletException, IOException {
         Integer number = (Integer)request.getSession().getAttribute("number");
+
+
         if (number==null){
             number=1;
         }else{
@@ -121,27 +127,32 @@ public class AccountCon {
                     ,HttpServletRequest request
                     ,HttpServletResponse response) throws ServletException, IOException {
 
-        Account account=new Account();
-        account.setEmial(email);
-        account.setPassword(password);
-        account.setName(name);
-        if(accountService.Validated(account,password2).size()>0){
-            request.getSession().setAttribute("emap",accountService.Validated(account,password2));
-            request.getRequestDispatcher("/sign").forward(request,response);
+        if (anInt==0){
+            request.getSession().setAttribute("signmsg", "未开放注册");
+            request.getRequestDispatcher("/sign").forward(request, response);
         }else {
-            Integer signNumber = (Integer) request.getSession().getAttribute("signNumber");
-            if (signNumber == null) {
-                signNumber = 1;
-            } else if (signNumber > 4) {
-                request.getSession().setAttribute("signmsg", "注册次数过多");
+            Account account = new Account();
+            account.setEmial(email);
+            account.setPassword(password);
+            account.setName(name);
+            if (accountService.Validated(account, password2).size() > 0) {
+                request.getSession().setAttribute("emap", accountService.Validated(account, password2));
                 request.getRequestDispatcher("/sign").forward(request, response);
-            }
-            signNumber++;
-            try {
-                accountService.Firstsign(name, password, email);
-            } catch (AccountError accountError) {
-                request.getSession().setAttribute("signmsg", accountError.getMessage());
-                request.getRequestDispatcher("/sign").forward(request, response);
+            } else {
+                Integer signNumber = (Integer) request.getSession().getAttribute("signNumber");
+                if (signNumber == null) {
+                    signNumber = 1;
+                } else if (signNumber > 4) {
+                    request.getSession().setAttribute("signmsg", "注册次数过多");
+                    request.getRequestDispatcher("/sign").forward(request, response);
+                }
+                signNumber++;
+                try {
+                    accountService.Firstsign(name, password, email);
+                } catch (AccountError accountError) {
+                    request.getSession().setAttribute("signmsg", accountError.getMessage());
+                    request.getRequestDispatcher("/sign").forward(request, response);
+                }
             }
         }
         return "loginsuccess";

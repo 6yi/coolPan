@@ -38,7 +38,7 @@ public class FileHeaderHelper {
         System.out.println(filetype);
         Integer type=maps.get(filetype);
         if (type==null){
-            return 6;
+            return 4;
         }else{
             System.out.println("type="+type);
             return type;
