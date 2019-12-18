@@ -21,6 +21,10 @@ spring.servlet.multipart.max-file-size=1600MB
 spring.servlet.multipart.max-request-size=1600MB
 #每个用户的初始空间大小(单位MB)
 account.maxsize=5000
+
+#是否开放注册0或1
+account.signup=0    
+
 #数据库
 mybatis.mapper-locations=classpath*:mapper/*.xml
 spring.datasource.url=jdbc:mysql://127.0.0.1:3306/coolpan?serverTimezone=GMT
