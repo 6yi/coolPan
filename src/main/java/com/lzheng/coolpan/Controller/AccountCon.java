@@ -5,23 +5,15 @@ import com.lzheng.coolpan.Service.AccountService;
 import com.lzheng.coolpan.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 /**
  * @ClassName AccountCon
@@ -32,6 +24,7 @@ import java.util.Map;
  */
 
 @Controller
+
 public class AccountCon {
 
     @Autowired
@@ -62,14 +55,26 @@ public class AccountCon {
         }
         request.getSession().setAttribute("number",number);
         Account user=accountService.selectByName(name);
-        if(user==null||!user.getPassword().equals(password)){
-            request.getSession().setAttribute("msg","密码错误");
+
+        if(user!=null&&user.getStatus()==0){
+            request.setAttribute("msg","该账户未激活,已重新发送激活邮件");
+            accountService.sendMail(user.getEmial(),user.getNowsize(),user.getName());
             request.getRequestDispatcher("/login").forward(request,response);
+        }else if(user==null||!user.getPassword().equals(password)){
+            request.setAttribute("msg","密码错误");
+            request.getRequestDispatcher("/login").forward(request,response);
+        }else{
+            request.getSession().setAttribute("needLogin","1");
+            request.getSession().setAttribute("account",user);
+            request.getSession().setAttribute("name",name);
+            double bfb=((user.getNowsize()*1.0)/user.getMaxsize())*100;
+            request.getSession().setAttribute("bfb",bfb);
+            request.getSession().setAttribute("nowsize",user.getNowsize());
+            request.getSession().setAttribute("maxsize",user.getMaxsize());
+            request.getRequestDispatcher("/files").forward(request,response);
         }
 
-        request.getSession().setAttribute("needLogin","1");
-        request.getSession().setAttribute("account",user);
-        request.getRequestDispatcher("/files").forward(request,response);
+
     }
 
     @RequestMapping("/sign")
@@ -77,30 +82,29 @@ public class AccountCon {
         return "signup";
     }
 
-    @ResponseBody
-    @PostMapping("/Validated")
-    public Map<String,Object> Validated(@Validated Account account
-                                        ,@RequestParam("password2")String password2
-                                        ,BindingResult bindingResult
-                                        ,HttpServletRequest request
-                                        ,HttpServletResponse response){
-
-        Map<String,Object> map=new HashMap<>();
-        if (bindingResult.hasErrors()) {
-            List<ObjectError> errorList = bindingResult.getAllErrors();
-            List<String> mesList=new ArrayList<String>();
-            for (int i = 0; i < errorList.size(); i++) {
-                mesList.add(errorList.get(i).getDefaultMessage());
-                System.out.println(errorList.get(i).getDefaultMessage());
-            }
-            map.put("status", false);
-            map.put("error", mesList);
-
-        }else {
-            map.put("status", true);
-        }
-        return map;
-    }
+//    @ResponseBody
+//    @PostMapping("/Validated")
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public Map<String,Object> Validated(@Validated Account account
+//                                        ,@RequestParam("password2")String password2
+//                                        ,BindingResult bindingResult
+//                                        ,HttpServletRequest request
+//                                        ,HttpServletResponse response){
+//        Map<String,Object> map=new HashMap<>();
+//        if (bindingResult.hasErrors()) {
+//            List<ObjectError> errorList = bindingResult.getAllErrors();
+//            List<String> mesList=new ArrayList<String>();
+//            for (int i = 0; i < errorList.size(); i++) {
+//                mesList.add(errorList.get(i).getDefaultMessage());
+//                System.out.println(errorList.get(i).getDefaultMessage());
+//            }
+//            map.put("status", false);
+//            map.put("error", mesList);
+//        }else {
+//            map.put("status", true);
+//        }
+//        return map;
+//    }
 
 
     /**
@@ -110,28 +114,35 @@ public class AccountCon {
      * @Description 注册
      **/
     @PostMapping("/sign/in")
-    public String sign(@Validated Account account
+    public String sign(@RequestParam("name")String name,
+                       @RequestParam("password")String password
                     ,@RequestParam("password2")String password2
-                    ,BindingResult bindingResult
+                    ,@RequestParam("email")String email
                     ,HttpServletRequest request
                     ,HttpServletResponse response) throws ServletException, IOException {
 
-
-        Integer signNumber = (Integer)request.getSession().getAttribute("signNumber");
-        if (signNumber==null){
-            signNumber=1;
-        }else{
-            if (signNumber>4){
-                request.getSession().setAttribute("signmsg","注册次数过多");
-                request.getRequestDispatcher("/sign").forward(request,response);
+        Account account=new Account();
+        account.setEmial(email);
+        account.setPassword(password);
+        account.setName(name);
+        if(accountService.Validated(account,password2).size()>0){
+            request.getSession().setAttribute("emap",accountService.Validated(account,password2));
+            request.getRequestDispatcher("/sign").forward(request,response);
+        }else {
+            Integer signNumber = (Integer) request.getSession().getAttribute("signNumber");
+            if (signNumber == null) {
+                signNumber = 1;
+            } else if (signNumber > 4) {
+                request.getSession().setAttribute("signmsg", "注册次数过多");
+                request.getRequestDispatcher("/sign").forward(request, response);
             }
             signNumber++;
-        }
-        try {
-            accountService.Firstsign(account.getName(), account.getPassword(),account.getEmial());
-        } catch (AccountError accountError) {
-            request.getSession().setAttribute("signmsg",accountError.getMessage());
-            request.getRequestDispatcher("/sign").forward(request,response);
+            try {
+                accountService.Firstsign(name, password, email);
+            } catch (AccountError accountError) {
+                request.getSession().setAttribute("signmsg", accountError.getMessage());
+                request.getRequestDispatcher("/sign").forward(request, response);
+            }
         }
         return "loginsuccess";
     }

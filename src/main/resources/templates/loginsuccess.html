@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>success</title>
+
+</head>
+
+<body>
+    <div id="d" style="text-align: center;top: 50%">
+        </div>
+</body>
+ <script>
+    var count = 5;
+    var t;
+    function writeTip(){
+        document.getElementById("d").innerHTML = "<a href='index.html'>注册成功,请到邮箱检查激活链接,将在"+(count--)+"秒内跳转到登录页面</a>";
+        if(count==0){
+            window.clearInterval(t);
+            window.location = "/login";
+        }
+    }
+    t = window.setInterval("writeTip()",1000);
+</script>
+</html>

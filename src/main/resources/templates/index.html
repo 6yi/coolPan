@@ -18,6 +18,11 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <div style="padding-left: 20%;width: 50%">
+            用量:  [(${session.nowsize})] MB/ [(${session.maxsize})] MB
+            <div class="layui-progress layui-progress-big"  lay-filter="bfb">
+                <div class="layui-progress-bar" id="bfbnumber" lay-percent="0%"> </div>
+            </div>
+
             <table id="demo" style="width: 45%;" lay-filter="tab"></table>
             <script type="text/html" id="barDemo">
                 <a class="layui-btn layui-btn-xs" lay-event="download" >下载</a>
@@ -42,7 +47,9 @@
         <!-- 底部固定区域 -->
     </div>
 </body>
-<script>
+<script th:inline="javascript">
+
+    
     function type(typeid){
         $("#all").fadeIn(100);
         layui.use('table',function () {
@@ -66,7 +73,10 @@
         })
     }
     layui.use(['element','table','upload'], function(){
+        var bfb=[[${session.bfb}]]+'%';
         var element = layui.element,upload = layui.upload, table=layui.table;
+        element.progress('bfb',bfb);
+        $("#bfbnumber").text(bfb);
         upload.render({
             elem: '#test'
             ,url: '/files/upload',
@@ -176,6 +186,7 @@
             }
         });
     });
+
 </script>
 
 </html>

@@ -1,8 +1,10 @@
 package com.lzheng.coolpan.Controller;
+import com.lzheng.coolpan.Service.AccountService;
 import com.lzheng.coolpan.Service.FileService;
 import com.lzheng.coolpan.domain.Account;
 import com.lzheng.coolpan.domain.Files;
 import com.lzheng.coolpan.domain.retDate;
+import com.lzheng.coolpan.utils.FileHeaderHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -30,9 +32,14 @@ public class FileCon {
     @Autowired
     private FileService service;
 
+    @Autowired
+    FileHeaderHelper fileHeaderHelper;
 
     @Value("${file.SavePath}")
     private String SavePath;
+
+    @Autowired
+    private AccountService accountService;
 
 
 //    private Account account;
@@ -80,27 +87,34 @@ public class FileCon {
     @PostMapping("/files/upload")
     public Map<String,Object> upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         Map<String,Object> map=new HashMap<>();
-        if (file.isEmpty()) {
+        Account account= (Account)request.getSession().getAttribute("account");
+        int nowsize=account.getNowsize();
+        double filesize= (file.getSize()/1024000.0);
+        if (file.isEmpty()||nowsize+filesize>account.getMaxsize()) {
             map.put("msg","error");
             map.put("code",0);
             return map;
         }
         String fileName = file.getOriginalFilename();
-        Account account= (Account)request.getSession().getAttribute("account");
         String savedest=account.getSavefilename()+"/"+ UUID.randomUUID() +fileName;
         File dest = new File(SavePath +savedest);
         try {
+            file.getInputStream();
             file.transferTo(dest);
             Files newfile=new Files();
+            newfile.setFiletype(fileHeaderHelper.getFileType(file.getContentType()));
             newfile.setFilename(fileName);
             newfile.setFilepath(savedest);
             newfile.setTime(LocalDate.now().toString());
-            newfile.setSize(String.format("%.2f",(file.getSize()/1024000.0))+"MB");
+            newfile.setSize(String.format("%.2f",filesize)+"MB");
 //            Account account= (Account)request.getSession().getAttribute("account");
             newfile.setAccountid(account.getId());
             service.insert(newfile);
             map.put("msg","ok");
             map.put("code",200);
+            account.setNowsize((int)(nowsize+filesize));
+            request.getSession().setAttribute("nowsize",(int)(nowsize+filesize));
+            accountService.upDate(account);
             return map;
         } catch (IOException e) {
             map.put("msg","error");

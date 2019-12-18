@@ -14,21 +14,26 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <script src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
 </head>
-
 <body class="text-center">
-<form class="form-signin" id="f" >
+<form class="form-signin" method="post" action="/sign/in" >
     <!--			<img class="mb-4" th:src="@{/img/title.png}" src="../img/tigle.png" alt="" width="120" height="120">-->
     <h1 class="h3 mb-3 font-weight-normal" >注册</h1>
     <p style="color: red" th:text="${session.signmsg}"/>
     <label class="sr-only"  >用户名</label>
     <input type="text" class="form-control" name="name"  placeholder="Username" required="" autofocus="">
+    <p style="color: red" th:if="${session.emap!=null}"
+       th:text="${session.emap['id']}"></p>
     <label class="sr-only">密码</label>
     <input type="password"  name="password" class="form-control"  placeholder="Password" required="">
+    <p style="color: red" th:if="${session.emap!=null}"
+       th:text="${session.emap['password']}"></p>
     <input type="password"  name="password2" class="form-control"  placeholder="Enter password again" required="">
+    <p style="color: red" th:if="${session.emap!=null}"
+       th:text="${session.emap['password2']}"></p>
     <label class="sr-only">E-mail</label>
     <input type="email" name="email" class="form-control" placeholder="E-mail">
     <br>
-    <button class="btn btn-lg btn-primary btn-block" id="btn" >Sign up</button>
+    <button  id="btn"  class="btn btn-lg btn-primary btn-block"  >Sign up</button>
     <br/>
     <br/>
     <a href="/login">Sign in</a>
@@ -39,17 +44,21 @@
 
 </body>
 <script>
-    $("#btn").click(function () {
-            $.ajax({
-                url:'/Validated',
-                type:'POST',
-                data:$('#f').serializeArray(),
-                dataType: 'json',
-                success:function (msg) {
-                    console.log(msg)
-                }
-            })
-        });
+    // function aja() {
+    //         console.log("点了");
+    //         $.ajax({
+    //             url:'/Validated',
+    //             type:'POST',
+    //             data:$('#f').serializeArray(),
+    //             dataType: 'json',
+    //             success:function (msg) {
+    //                 console.log(msg)
+    //             },
+    //             error:function(msg){
+    //                 console.log(msg.errmsg);
+    //             }
+    //         })
+    //     };
 
 </script>
 
