@@ -87,9 +87,9 @@
                 element.progress('de', percent);
             }
             ,done: function(res){
-                console.log(res)
-            },error: function(){
-                alert("上传失败!");
+                if (res.code==0){
+                    alert("上传失败,超过上传容量限制~")
+                }
             }
         });
 

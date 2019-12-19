@@ -93,33 +93,33 @@ public class FileCon {
         if (file.isEmpty()||nowsize+filesize>account.getMaxsize()) {
             map.put("msg","error");
             map.put("code",0);
-            return map;
-        }
-        String fileName = file.getOriginalFilename();
-        String savedest=account.getSavefilename()+"/"+ UUID.randomUUID() +fileName;
-        File dest = new File(SavePath +savedest);
-        try {
-            file.getInputStream();
-            file.transferTo(dest);
-            Files newfile=new Files();
-            newfile.setFiletype(fileHeaderHelper.getFileType(file.getContentType()));
-            newfile.setFilename(fileName);
-            newfile.setFilepath(savedest);
-            newfile.setTime(LocalDate.now().toString());
-            newfile.setSize(String.format("%.2f",filesize)+"MB");
+        }else {
+            String fileName = file.getOriginalFilename();
+            String savedest = account.getSavefilename() + "/" + UUID.randomUUID() + fileName;
+            File dest = new File(SavePath + savedest);
+            try {
+                file.getInputStream();
+                file.transferTo(dest);
+                Files newfile = new Files();
+                newfile.setFiletype(fileHeaderHelper.getFileType(file.getContentType()));
+                newfile.setFilename(fileName);
+                newfile.setFilepath(savedest);
+                newfile.setTime(LocalDate.now().toString());
+                newfile.setSize(String.format("%.2f", filesize) + "MB");
 //            Account account= (Account)request.getSession().getAttribute("account");
-            newfile.setAccountid(account.getId());
-            service.insert(newfile);
-            map.put("msg","ok");
-            map.put("code",200);
-            account.setNowsize((int)(nowsize+filesize));
-            request.getSession().setAttribute("nowsize",(int)(nowsize+filesize));
-            accountService.upDate(account);
-            return map;
-        } catch (IOException e) {
-            map.put("msg","error");
-            map.put("code",0);
-            e.printStackTrace();
+                newfile.setAccountid(account.getId());
+                service.insert(newfile);
+                map.put("msg", "ok");
+                map.put("code", 200);
+                account.setNowsize((int) (nowsize + filesize));
+                request.getSession().setAttribute("nowsize", (int) (nowsize + filesize));
+                accountService.upDate(account);
+                return map;
+            } catch (IOException e) {
+                map.put("msg", "error");
+                map.put("code", 0);
+                e.printStackTrace();
+            }
         }
         return map;
     }

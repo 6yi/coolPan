@@ -73,7 +73,7 @@ public class AccountCon {
             request.getSession().setAttribute("account",user);
             request.getSession().setAttribute("name",name);
             double bfb=((user.getNowsize()*1.0)/user.getMaxsize())*100;
-            request.getSession().setAttribute("bfb",bfb);
+            request.getSession().setAttribute("bfb",String.format("%.2f",bfb));
             request.getSession().setAttribute("nowsize",user.getNowsize());
             request.getSession().setAttribute("maxsize",user.getMaxsize());
             request.getRequestDispatcher("/files").forward(request,response);
