@@ -90,7 +90,7 @@ mail.address=http://X.X.X.X:10086
 ### 启动方式
 
 ```
-用Maven打包成jar即可直接启动
+用Maven打包成jar即可直接启动,也可以把配置文件放到jar同文件下
 java -jar xxx.jar
 ```
 
