@@ -49,12 +49,11 @@ public class AccountCon {
                      HttpServletResponse response) throws ServletException, IOException {
         Integer number = (Integer)request.getSession().getAttribute("number");
 
-
         if (number==null){
             number=1;
         }else{
             if (number>4){
-                request.getSession().setAttribute("msg","失败次数过多");
+                request.setAttribute("msg","失败次数过多");
                 request.getRequestDispatcher("/login").forward(request,response);
             }
             number++;

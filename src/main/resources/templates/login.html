@@ -18,7 +18,7 @@
 <form class="form-signin" action="dashboard.html" th:action="@{/in}" method="post">
     <!--			<img class="mb-4" th:src="@{/img/title.png}" src="../img/tigle.png" alt="" width="120" height="120">-->
     <h1 class="h3 mb-3 font-weight-normal" >登录</h1>
-    <p style="color: red" th:text="${session.msg}"/>
+    <p style="color: red" th:text="${msg}"/>
     <label class="sr-only" >Username</label>
     <input type="text" class="form-control" name="name"  placeholder="Username" required="" autofocus="">
     <label class="sr-only">Password</label>
