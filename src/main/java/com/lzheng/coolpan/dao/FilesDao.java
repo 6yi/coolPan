@@ -19,4 +19,8 @@ public interface FilesDao {
 
     List<Files> findByAccountId(Integer id);
     List<Files> findByType(Integer id, Integer type);
+    List<Files> findPublicFilesByType(Integer type);
+
+    List<Files> findPublicFiles();
+
 }

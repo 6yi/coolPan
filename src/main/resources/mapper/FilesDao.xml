@@ -9,9 +9,10 @@
     <result column="filetype" jdbcType="INTEGER" property="filetype" />
     <result column="size" jdbcType="VARCHAR" property="size" />
     <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="ispublic" jdbcType="INTEGER" property="ispublic" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, accountid, filename, filepath, filetype, `size`, `time`
+    id, accountid, filename, filepath, filetype, `size`, `time`,ispublic
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -25,10 +26,10 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Files" useGeneratedKeys="true">
     insert into files (accountid, filename, filepath, 
-      filetype, `size`, `time`
+      filetype, `size`, `time`,ispublic
       )
     values (#{accountid,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{filepath,jdbcType=VARCHAR}, 
-      #{filetype,jdbcType=INTEGER}, #{size,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}
+      #{filetype,jdbcType=INTEGER}, #{size,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR},#{ispublic,jdbcType=INTEGER}
       )
   </insert>
 
@@ -38,6 +39,13 @@
   <select id="findByType" resultType="com.lzheng.coolpan.domain.Files">
   select * from  files f where f.accountid=#{id} and f.filetype=#{type}
 </select>
+
+  <select id="findPublicFilesByType" resultType="com.lzheng.coolpan.domain.Files">
+    select * from files where filetype=#{type} and ispublic=1
+  </select>
+  <select id="findPublicFiles" resultType="com.lzheng.coolpan.domain.Files">
+    select * from files where ispublic=1;
+  </select>
 
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Files" useGeneratedKeys="true">
     insert into files
@@ -60,6 +68,9 @@
       <if test="time != null">
         `time`,
       </if>
+      <if test="ispublic != null">
+        ispublic,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="accountid != null">
@@ -79,6 +90,9 @@
       </if>
       <if test="time != null">
         #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="ispublic != null">
+        #{ispublic,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -103,6 +117,9 @@
       <if test="time != null">
         `time` = #{time,jdbcType=VARCHAR},
       </if>
+      <if test="ispublic != null">
+        ispublic = #{ispublic,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -113,7 +130,8 @@
       filepath = #{filepath,jdbcType=VARCHAR},
       filetype = #{filetype,jdbcType=INTEGER},
       `size` = #{size,jdbcType=VARCHAR},
-      `time` = #{time,jdbcType=VARCHAR}
+      `time` = #{time,jdbcType=VARCHAR},
+      ispublic = #{ispublic,jdbcType=INTEGER},
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

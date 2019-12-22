@@ -21,6 +21,16 @@ public class Files implements Serializable {
 
     private String time;
 
+    private int ispublic;
+
+    public int getIspublic() {
+        return ispublic;
+    }
+
+    public void setIspublic(int ispublic) {
+        this.ispublic = ispublic;
+    }
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -77,5 +87,19 @@ public class Files implements Serializable {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    @Override
+    public String toString() {
+        return "Files{" +
+                "id=" + id +
+                ", accountid=" + accountid +
+                ", filename='" + filename + '\'' +
+                ", filepath='" + filepath + '\'' +
+                ", filetype=" + filetype +
+                ", size='" + size + '\'' +
+                ", time='" + time + '\'' +
+                ", ispublic=" + ispublic +
+                '}';
     }
 }

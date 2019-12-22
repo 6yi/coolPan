@@ -44,11 +44,40 @@ public class FileCon {
 
 //    private Account account;
 
+    @RequestMapping("/public")
+    public String publicFile(){
+        return "publicfile";
+    }
+
+    @RequestMapping("/publicfiles")
+    @ResponseBody
+    public retDate publicFileType(@RequestParam("type") Integer type,HttpServletRequest request){
+        retDate date=new retDate();
+        date.setCode("0");
+        date.setMsg("");
+        Object[] filesArry={};
+        List<Files> files=null;
+        if (type==6){
+            files=service.findPublicFiles();
+        }else{
+            files=service.findPublicFilesByType(type);
+        }
+        if (files!=null){
+            filesArry=files.toArray();
+        }
+        date.setData(filesArry);
+        date.setCount(filesArry.length);
+        return date;
+    }
 
     @RequestMapping("/files")
     public String files(HttpServletRequest request){
-
         return "index";
+    }
+
+    @RequestMapping("/publicfiles/download")
+    public void PublicDownload(HttpServletResponse res, @RequestParam("filepath") String filepath,@RequestParam("filename") String fileName) throws UnsupportedEncodingException{
+        Download(res,filepath,fileName);
     }
 
     @RequestMapping("/files/download")
@@ -80,7 +109,7 @@ public class FileCon {
                 }
             }
         }
-        System.out.println("export file finish");
+        System.out.println("Ok");
     }
 
     @ResponseBody

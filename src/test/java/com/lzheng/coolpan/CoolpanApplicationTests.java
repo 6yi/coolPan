@@ -4,6 +4,7 @@ import com.lzheng.coolpan.Service.MailService;
 import com.lzheng.coolpan.dao.AccountDao;
 import com.lzheng.coolpan.dao.FilesDao;
 import com.lzheng.coolpan.domain.Account;
+import com.lzheng.coolpan.domain.Files;
 import com.lzheng.coolpan.utils.FileHeaderHelper;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -75,6 +76,16 @@ class CoolpanApplicationTests {
             System.out.println(key);
         }
 //        System.out.println(LocalDate.now());
+    }
+
+
+    @Test
+    void contextLoads6() {
+        Files files=new Files();
+        files.setFiletype(1);
+        files.setIspublic(0);
+        System.out.println(dao.selectByPrimaryKey(48));
+//       dao.insert(files);
     }
 
 }

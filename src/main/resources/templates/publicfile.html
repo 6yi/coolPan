@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>CoolPan</title>
+    <link href="asserts/css/signin.css" th:href="@{/layui/css/layui.css}" rel="stylesheet">
+    <script src="JQ/jquery-3.3.1.min.js" th:src="@{/layui/layui.js}"></script>
+    <script src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+    <style>
+        .layui-container{
+            height: 100%;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin" th:fragment="header" >
+    <div class="layui-header">
+        <div class="layui-logo">CoolPan</div>
+        <ul class="layui-nav layui-layout-left">
+            <!--            <li class="layui-nav-item"><a href="">控制台</a></li>-->
+            <!--            <li class="layui-nav-item"><a href="">商品管理</a></li>-->
+            <!--            <li class="layui-nav-item"><a href="">用户</a></li>-->
+            <!--            <li class="layui-nav-item">-->
+            <!--                <a href="javascript:;">其它系统</a>-->
+            <!--                <dl class="layui-nav-child">-->
+            <!--                    <dd><a href="">邮件管理</a></dd>-->
+            <!--                    <dd><a href="">消息管理</a></dd>-->
+            <!--                    <dd><a href="">授权管理</a></dd>-->
+            <!--                </dl>-->
+            <!--            </li>-->
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item"><a href="/exit">CoolPan共享文件</a></li>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">我的文件</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:type(6);">全部</a></dd>
+                        <dd><a href="javascript:type(0);">图片</a></dd>
+                        <dd><a href="javascript:type(1);">压缩包</a></dd>
+                        <dd><a href="javascript:type(2);">文档</a></dd>
+                        <dd><a href="javascript:type(3);">音乐&视频</a></dd>
+                        <dd><a href="javascript:type(4);">其它</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+<div class="layui-body">
+    <div style="padding-left: 20%;width: 50%">
+        <table id="demo" style="width: 45%;" lay-filter="tab"></table>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs" lay-event="download" >下载</a>
+        </script>
+    </div>
+</div>
+<div class="layui-footer" style="height: 60px">
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" lay-filter='de'>
+        <div class="layui-progress-bar layui-bg-green" lay-percent="0%"></div>
+    </div>
+    © lzhengycy.club || CoolPan
+</div>
+</body>
+<script th:inline="javascript">
+    function type(typeid){
+        $("#all").fadeIn(100);
+        layui.use('table',function () {
+            var table = layui.table;
+            table.render({
+                elem: '#demo'
+                ,height: 730,
+                width: 'full-866'
+                ,url: '/publicfiles?type='+typeid,
+                loading: true
+                ,cols: [
+                    [
+                        {type:'checkbox'},
+                        {field: 'filename', title: '文件名', width:300,sort: true}
+                        ,{field: 'size', title: '文件大小', width:180,sort: true}
+                        ,{field: 'time', title: '创建时间', width:150, sort: true}
+                        ,{fixed: 'right', width:180, align:'center', toolbar: '#barDemo'}
+                    ]
+                ]
+            });
+        })
+    }
+    layui.use(['element','table','upload'], function(){
+        var element = layui.element,table=layui.table;
+        var $1 = layui.$, active = {
+            getDownload: function(){
+                var checkStatus = table.checkStatus('demo')
+                    ,data = checkStatus.data;
+                $(function () {
+                    $.each(data, function(index, value) {
+                        layer.open({
+                            type: 2,
+                            shade: false,
+                            resize: false,
+                            offset: 'rb',
+                            icon: 0,
+                            title:'开始下载',
+                            time:3000,
+                            maxmin: true,
+                            content: "/publicfiles/download?filename="+value.filename+"&filepath="+value.filepath,
+                            success:function(){
+                                layer.closeAll();
+                                layer.msg(res.msg, {
+                                    icon: 5,
+                                    time: 1500
+                                });
+                            }
+                        });
+                    });
+                })
+            }
+        };
+        $1('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        table.on('tool(tab)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'download'){
+                layer.open({
+                    type: 2,
+                    shade: false,
+                    resize: false,
+                    offset: 'rb',
+                    icon: 0,
+                    title:'开始下载',
+                    time:3000,
+                    maxmin: true,
+                    content: "/files/download?filename="+data.filename+"&filepath="+data.filepath,
+                    success:function(){
+                        layer.closeAll();
+                        layer.msg(res.msg, {
+                            icon: 5,
+                            time: 1500
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+</html>

@@ -45,4 +45,10 @@ public class FileService {
             file.delete();
     }
 
+    public List<Files> findPublicFilesByType(int type){
+        return dao.findPublicFilesByType(type);
+    }
+    public List<Files> findPublicFiles(){
+        return dao.findPublicFiles();
+    }
 }
