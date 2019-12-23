@@ -64,9 +64,6 @@
     </div>
 </div>
 <div class="layui-footer" style="height: 60px">
-    <div class="layui-progress layui-progress-big" lay-showPercent="yes" lay-filter='de'>
-        <div class="layui-progress-bar layui-bg-green" lay-percent="0%"></div>
-    </div>
     © lzhengycy.club || CoolPan
 </div>
 </body>
@@ -123,6 +120,10 @@
                 })
             }
         };
+
+
+
+
         $1('.demoTable .layui-btn').on('click', function(){
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';

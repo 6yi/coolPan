@@ -35,6 +35,7 @@
             <div class="layui-btn-group demoTable" id="all" style="display: none">
                 <button class="layui-btn" data-type="getDownload">下载选中数据</button>
                 <button class="layui-btn" data-type="getDelete">删除选中数据</button>
+                <button class="layui-btn" data-type="share" id="sharemore">共享选中数据  </button>
             </div>
         </div>
 
@@ -57,7 +58,10 @@
     function type(typeid){
         var toolbar="#barDemo";
         if (typeid==7){
-            toolbar="#share"
+            toolbar="#share";
+            $("#sharemore").attr("data-type","notshare").text("取消共享选中数据")
+        }else{
+            $("#sharemore").attr("data-type","share").text("共享选中数据  ")
         }
         $("#all").fadeIn(100);
         layui.use('table',function () {
@@ -104,6 +108,7 @@
         table.on('checkbox(demo)', function(obj){
             console.log(obj)
         });
+
         var $1 = layui.$, active = {
             getDownload: function(){
                 var checkStatus = table.checkStatus('demo')
@@ -139,6 +144,44 @@
                         $.each(data, function(index, value) {
                             $.ajax({
                                 url:'/files/delete?filepath='+value.filepath+'&id='+value.id,
+                                type:'GET',
+                                success:function (data) {
+                                    console.log("success")
+                                }
+                            })
+                        })
+                    });
+                    layer.close(index);
+                    parent.location.reload();
+                });
+            }
+            ,share:function () {
+                var checkStatus = table.checkStatus('demo')
+                    ,data = checkStatus.data;
+                layer.confirm('真的共享这些数据么', function(index){
+                    $(function () {
+                        $.each(data, function(index, value) {
+                            $.ajax({
+                                url:'/files/share?id='+value.id+'&state='+1,
+                                type:'GET',
+                                success:function (data) {
+                                    console.log("success")
+                                }
+                            })
+                        })
+                    })
+                    layer.close(index);
+                    parent.location.reload();
+                });
+            }
+            ,notshare:function () {
+                var checkStatus = table.checkStatus('demo')
+                    ,data = checkStatus.data;
+                layer.confirm('取消共享这些数据么', function(index){
+                    $(function () {
+                        $.each(data, function(index, value) {
+                            $.ajax({
+                                url:'/files/share?id='+value.id+'&state='+0,
                                 type:'GET',
                                 success:function (data) {
                                     console.log("success")
