@@ -23,4 +23,8 @@ public interface FilesDao {
 
     List<Files> findPublicFiles();
 
+    List<Files> findPublicFilesById(Integer id);
+
+    void UpadateIspublicById(Integer id, int state);
+
 }

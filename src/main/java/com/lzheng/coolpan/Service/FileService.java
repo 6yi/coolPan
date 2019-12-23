@@ -26,29 +26,31 @@ public class FileService {
 
     @Value("${file.SavePath}")
     private  String SavePath;
-
     public List<Files> findFilesById(Integer id){
         return dao.findByAccountId(id);
     }
-
     public List<Files> findFilesByType(Integer id,Integer type){
         return dao.findByType(id,type);
     }
     public void insert(Files files){
         dao.insertSelective(files);
     }
-
     public void delete(Integer id,String filepath){
         dao.deleteByPrimaryKey(id);
         File file=new File(SavePath+filepath);
         if(file.exists()&&file.isFile())
             file.delete();
     }
-
     public List<Files> findPublicFilesByType(int type){
         return dao.findPublicFilesByType(type);
     }
     public List<Files> findPublicFiles(){
         return dao.findPublicFiles();
+    }
+    public List<Files> findPublicFilesById(Integer id){
+        return dao.findPublicFilesById(id);
+    }
+    public void UpadateIspublicById(Integer id,int state){
+        dao.UpadateIspublicById(id,state);
     }
 }

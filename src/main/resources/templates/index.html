@@ -27,6 +27,10 @@
             <script type="text/html" id="barDemo">
                 <a class="layui-btn layui-btn-xs" lay-event="download" >下载</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="share">共享</a>
+            </script>
+            <script type="text/html" id="share">
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="notshare">取消共享</a>
             </script>
             <div class="layui-btn-group demoTable" id="all" style="display: none">
                 <button class="layui-btn" data-type="getDownload">下载选中数据</button>
@@ -51,6 +55,10 @@
 
     
     function type(typeid){
+        var toolbar="#barDemo";
+        if (typeid==7){
+            toolbar="#share"
+        }
         $("#all").fadeIn(100);
         layui.use('table',function () {
             var table = layui.table;
@@ -66,7 +74,7 @@
                         {field: 'filename', title: '文件名', width:300,sort: true}
                         ,{field: 'size', title: '文件大小', width:180,sort: true}
                         ,{field: 'time', title: '创建时间', width:150, sort: true}
-                        ,{fixed: 'right', width:180, align:'center', toolbar: '#barDemo'}
+                        ,{fixed: 'right', width:180, align:'center', toolbar: toolbar}
                     ]
                 ]
             });
@@ -183,7 +191,32 @@
                        });
                    }
                });
-            }
+            } else if (obj.event==='share'){
+               layer.confirm('确认共享吗', function(index){
+                   // obj.del();
+                   $.ajax({
+                       url:'/files/share?id='+data.id+'&state='+1,
+                       type:'GET',
+                       success:function (data) {
+                          console.log("共享成功");
+                       }
+                   });
+                   layer.close(index);
+               });
+           } else if (obj.event==='notshare'){
+               layer.confirm('确认取消共享吗', function(index){
+                   obj.del();
+                   $.ajax({
+                       url:'/files/share?id='+data.id+'&state='+0,
+                       type:'GET',
+                       success:function (data) {
+                           console.log("取消成功")
+                       }
+                   });
+                   layer.close(index);
+               });
+           }
+
         });
     });
 

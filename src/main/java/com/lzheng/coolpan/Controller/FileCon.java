@@ -77,11 +77,16 @@ public class FileCon {
 
     @RequestMapping("/publicfiles/download")
     public void PublicDownload(HttpServletResponse res, @RequestParam("filepath") String filepath,@RequestParam("filename") String fileName) throws UnsupportedEncodingException{
-        Download(res,filepath,fileName);
+        download(res,filepath,fileName);
     }
 
     @RequestMapping("/files/download")
     public void Download(HttpServletResponse res, @RequestParam("filepath") String filepath,@RequestParam("filename") String fileName) throws UnsupportedEncodingException {
+        download(res, filepath, fileName);
+        System.out.println("Ok");
+    }
+
+    private void download(HttpServletResponse res, @RequestParam("filepath") String filepath, @RequestParam("filename") String fileName) throws UnsupportedEncodingException {
         res.setHeader("content-type", "application/octet-stream");
         res.setContentType("application/octet-stream");
         res.setHeader("Content-Disposition", "attachment; filename=" + new String(fileName.getBytes("UTF-8"),"ISO-8859-1"));
@@ -109,7 +114,6 @@ public class FileCon {
                 }
             }
         }
-        System.out.println("Ok");
     }
 
     @ResponseBody
@@ -165,6 +169,8 @@ public class FileCon {
         Account account= (Account)request.getSession().getAttribute("account");
         if (type==6){
             files=service.findFilesById(account.getId());
+        }else if(type==7){
+            files=service.findPublicFilesById(account.getId());
         }else{
             files=service.findFilesByType(account.getId(),type);
         }
@@ -176,7 +182,14 @@ public class FileCon {
         return date;
     }
 
+    @RequestMapping("/files/share")
+    @ResponseBody
+    public void share(@RequestParam("id")Integer id,@RequestParam("state")int state,HttpServletRequest request){
+        service.UpadateIspublicById(id, state);
+    }
+
     @RequestMapping("/files/delete")
+    @ResponseBody
     public void delete(@RequestParam("filepath") String filepath,@RequestParam("id")Integer id,HttpServletRequest request){
             service.delete(id,filepath);
     }

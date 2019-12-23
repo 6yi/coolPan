@@ -46,6 +46,9 @@
   <select id="findPublicFiles" resultType="com.lzheng.coolpan.domain.Files">
     select * from files where ispublic=1;
   </select>
+  <select id="findPublicFilesById" resultType="com.lzheng.coolpan.domain.Files">
+    select * from files where ispublic=1 and accountid=#{id}
+  </select>
 
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lzheng.coolpan.domain.Files" useGeneratedKeys="true">
     insert into files
@@ -133,5 +136,8 @@
       `time` = #{time,jdbcType=VARCHAR},
       ispublic = #{ispublic,jdbcType=INTEGER},
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="UpadateIspublicById">
+    update files set ispublic=#{state} where id=#{id}
   </update>
 </mapper>
