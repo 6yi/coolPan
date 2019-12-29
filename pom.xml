@@ -75,11 +75,9 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.2.0</version>
                 <configuration>
-                    <!-- 这里是最终生成的docker镜像名称 -->
-                    <imageName>itweknow/${project.artifactId}</imageName>
-                    <!-- 基础镜像，运行一个springboot应用只需要基础的java环境就行 -->
+                    <imageName>lzheng/${project.artifactId}</imageName>
                     <baseImage>java:8</baseImage>
-                    <!-- docker启动的时候执行的命令 -->
+                    <volumes>/tmp:/root/savepath</volumes>
                     <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
                     <resources>
                         <resource>

@@ -1,4 +1,4 @@
-## coolPan  V1.0
+## coolPan  V1.1
    自建私有云盘管理~~
 
   springBoot练手项目
@@ -8,6 +8,7 @@
 # 启动前准备
 
 1.准备好mysql以及Maven和java环境
+
 ```mysql
 数据库创建语句
 
@@ -23,7 +24,7 @@ CREATE TABLE `account` (
   `emial` varchar(100) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8
 
 CREATE TABLE `files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -33,10 +34,11 @@ CREATE TABLE `files` (
   `filetype` int(11) DEFAULT NULL,
   `size` varchar(40) DEFAULT NULL,
   `time` varchar(100) DEFAULT NULL,
+  `ispublic` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_id_type` (`accountid`,`filetype`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
-
+  KEY `idx_id_type` (`accountid`,`filetype`),
+  KEY `idx_ispublic_id_type` (`accountid`,`ispublic`,`filetype`)
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8
 ```
 
 
@@ -87,7 +89,67 @@ mail.address=http://X.X.X.X:10086
 
 
 
-### 启动方式
+# 启动方式
+
+### Docker启动
+
+#### 一.maven的docker插件启动
+
+填写pom文件
+
+```xml
+ <plugin>
+     <groupId>com.spotify</groupId>
+     <artifactId>docker-maven-plugin</artifactId>
+     <version>1.2.0</version>
+     <configuration>
+         <imageName>lzheng/${project.artifactId}</imageName>
+         <baseImage>java:8</baseImage>
+         <volumes>宿主机储存地址:配置信息所填地址</volumes>
+         <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+         <resources>
+             <resource>
+                 <targetPath>/</targetPath>
+                 <directory>${project.build.directory}</directory>
+                 <include>${project.build.finalName}.jar</include>
+             </resource>
+         </resources>
+     </configuration>
+  </plugin>
+```
+
+把整个项目放到服务器内,进入项目目录
+
+```shell
+#构建镜像
+mvn clean package docker:build -Dmaven.test.skip=true
+#启动容器
+docker run -itd  -p 需要暴露的端口:配置信息所填的端口 镜像名
+```
+
+
+
+#### 二.dockerfile文件启动
+
+使用dockefile文件启动,将dockerfile文件于maven打包好的jar包放一起
+
+```
+FROM java:8
+VOLUME 宿主机保存路径:配置文件所填的保存路径
+COPY coolpan-1.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ['java','-jar','app.jar']
+```
+
+```
+#打包镜像
+docker build -t coolpan:1.0 .
+#启动
+docker run -d -p 你要暴露的端口:配置信息所填的端口 镜像id
+```
+
+
+
+### 直接用Maven启动
 
 ```
 用Maven打包成jar即可直接启动,也可以把配置文件放到jar同文件下
