@@ -1,5 +1,7 @@
 ## coolPan  V1.2
-
+<a href="https://www.php.net/"><img src="https://img.shields.io/badge/PHP-7.x-green" alt="License"></a>
+ <a href="https://opensource.org/licenses/MIT"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
+ <a href="https://travis-ci.org/laravel/framework"><img src="https://img.shields.io/badge/Laravel-5.8-red" alt="Latest Stable Version"></a>
 ```shell
     ___       ___       ___       ___       ___       ___       ___
    /\  \     /\  \     /\  \     /\__\     /\  \     /\  \     /\__\
