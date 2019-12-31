@@ -1,8 +1,3 @@
-## coolPan  V1.2
-<a href="https://spring.io/projects/spring-boot/"><img src="https://img.shields.io/badge/SpringBoot-2.2.2.RELEASE-green" alt="License"></a>
- <a href="https://opensource.org/licenses/MIT"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</a>
-```shell
     ___       ___       ___       ___       ___       ___       ___
    /\  \     /\  \     /\  \     /\__\     /\  \     /\  \     /\__\
   /::\  \   /::\  \   /::\  \   /:/  /    /::\  \   /::\  \   /:| _|_
@@ -13,8 +8,11 @@
                                                     2.2.2.RELEASE
                                                     COOLPAN V1.2
                                                     by lzheng   https://github.com/6yi
-```
-
+                                                    
+# coolPan  V1.2
+<a href="https://spring.io/projects/spring-boot/"><img src="https://img.shields.io/badge/SpringBoot-2.2.2.RELEASE-green" alt="License"></a>
+ <a href="https://opensource.org/licenses/MIT"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
+</a>
    自建私有云盘管理~~
 
   springBoot练手项目
