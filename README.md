@@ -9,11 +9,17 @@
 
 1.准备好mysql以及Maven和java环境
 
+先创建好数据库
+
 ```mysql
-数据库创建语句
-
 CREATE DATABASE coolpan;
+```
 
+使用springboot的schema建表(推荐)  ,修改项目内的schema.sql
+
+或者自行建表
+
+```mysql
 CREATE TABLE `account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) DEFAULT NULL,
