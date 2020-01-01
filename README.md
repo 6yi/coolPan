@@ -1,16 +1,5 @@
  
- ```shell                                             
-    ___       ___       ___       ___       ___       ___       ___
-   /\  \     /\  \     /\  \     /\__\     /\  \     /\  \     /\__\
-  /::\  \   /::\  \   /::\  \   /:/  /    /::\  \   /::\  \   /:| _|_
- /:/\:\__\ /:/\:\__\ /:/\:\__\ /:/__/    /::\:\__\ /::\:\__\ /::|/\__\
- \:\ \/__/ \:\/:/  / \:\/:/  / \:\  \    \/\::/  / \/\::/  / \/|::/  /
-  \:\__\    \::/  /   \::/  /   \:\__\      \/__/    /:/  /    |:/  /
-   \/__/     \/__/     \/__/     \/__/               \/__/     \/__/
-                                                    2.2.2.RELEASE
-                                                    COOLPAN V1.2
-                                                    by lzheng   https://github.com/6yi
-```                                                    
+<img src='http://59.110.173.180/usr/uploads/2020/01/2487387085.png'/>                                           
 
 # coolPan  V1.2
 <a href="https://spring.io/projects/spring-boot/"><img src="https://img.shields.io/badge/SpringBoot-2.2.2.RELEASE-green" alt="License"></a>
