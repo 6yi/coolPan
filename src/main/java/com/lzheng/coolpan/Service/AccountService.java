@@ -7,6 +7,7 @@ import com.lzheng.coolpan.dao.AccountDao;
 import com.lzheng.coolpan.domain.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -69,22 +70,23 @@ public class AccountService {
         account.setNowsize(code);//这里先给一串随机数字,用来验证用户是否激活
         account.setMaxsize(maxsize);
         String ename = account.getName();
-        sendMail(mail, code, ename);
+        try {
+            mailService.sendSimpleMail(mail, code, ename);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         accountDao.insert(account);
 
     }
 
+
+    @Async
     public void sendMail(String mail, int code, String ename) {
-        new Thread(){
-            @Override
-            public void run() {
-                try {
-                    mailService.sendSimpleMail(mail, code, ename);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
+        try {
+            mailService.sendSimpleMail(mail, code, ename);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean verifyCode(String name, int code) {

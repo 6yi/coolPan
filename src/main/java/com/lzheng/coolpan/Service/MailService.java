@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -39,6 +40,8 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
+
+    @Async
     public void sendSimpleMail(String to,int code,String name) throws UnsupportedEncodingException {
         SimpleMailMessage message = new SimpleMailMessage();
         String fromByte = new String((from + " <" + fromMail + ">")
